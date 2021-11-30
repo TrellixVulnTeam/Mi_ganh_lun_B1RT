@@ -4,6 +4,7 @@ const util = require('../util/Utility');
 const product = require('../models/product');
 const category = require('../models/category');
 const { getDataSlug } = require('../util/Utility');
+const detail = require('../models/detail');
 
 let maximumPagination=5;
 let currentPage=1;
@@ -77,7 +78,9 @@ class ShopController{
             for (let i=0;i<productLength;i++){
                 detailPromises.push(ProductService.getImageLink(products[i].proID));
                 detailPromises.push(ProductService.getProductDetail(products[i].proID));
-                detailPromises.push(ProductService.getCateName(products[i].catID))
+                detailPromises.push(ProductService.getCateName(products[i].catID));
+				detailPromises.push(ProductService.getBrandSlug(products[i].brandID));
+				detailPromises.push(ProductService.getCateSlug(products[i].catID));
             }
 
             
@@ -87,11 +90,13 @@ class ShopController{
             .then(result=>{
             
                     for (let i=0;i<productLength;i++){
-                        products[i].image=result[i*3][0].proImage;
-                        products[i].detail=result[i*3+1];
-                        products[i].cate=result[i*3+2].catName;
-                    }
-
+                        products[i].image=result[i*5][0].proImage;
+                        products[i].detail=result[i*5+1];
+                        products[i].cate=result[i*5+2].catName;
+						products[i].brandslug=result[i*5+3].brandSlug;
+						products[i].cateslug=result[i*5+4].catSlug;
+						products[i].genderslug=getGenderSlug(products[i].sex)
+					}
 
                     res.render('shop/shop',{
                         products,
@@ -346,6 +351,8 @@ function shopbycate(req,res,next,brand,gender,category) {
 			detailPromises.push(ProductService.getImageLink(products[i].proID));
 			detailPromises.push(ProductService.getProductDetail(products[i].proID));
 			detailPromises.push(ProductService.getCateName(products[i].catID));
+			detailPromises.push(ProductService.getBrandSlug(products[i].brandID));
+			detailPromises.push(ProductService.getCateSlug(products[i].catID));
 		}
 
 		
@@ -355,9 +362,12 @@ function shopbycate(req,res,next,brand,gender,category) {
 		.then(result=>{
 		
 				for (let i=0;i<productLength;i++){
-					products[i].image=result[i*3][0].proImage;
-					products[i].detail=result[i*3+1];
-					products[i].cate=result[i*3+2].catName;
+					products[i].image=result[i*5][0].proImage;
+					products[i].detail=result[i*5+1];
+					products[i].cate=result[i*5+2].catName;
+					products[i].brandslug=result[i*5+3].brandSlug;
+					products[i].cateslug=result[i*5+4].catSlug;
+					products[i].genderslug=getGenderSlug(products[i].sex)
 				}
 
 					res.render("shop/category",{
@@ -474,6 +484,8 @@ function shopbybrand(req,res,next,brand) {
 			detailPromises.push(ProductService.getImageLink(products[i].proID));
 			detailPromises.push(ProductService.getProductDetail(products[i].proID));
 			detailPromises.push(ProductService.getCateName(products[i].catID));
+			detailPromises.push(ProductService.getBrandSlug(products[i].brandID));
+			detailPromises.push(ProductService.getCateSlug(products[i].catID));
 		}
 
 		
@@ -483,9 +495,12 @@ function shopbybrand(req,res,next,brand) {
 		.then(result=>{
 		
 				for (let i=0;i<productLength;i++){
-					products[i].image=result[i*3][0].proImage;
-					products[i].detail=result[i*3+1];
-					products[i].cate=result[i*3+2].catName;
+					products[i].image=result[i*5][0].proImage;
+					products[i].detail=result[i*5+1];
+					products[i].cate=result[i*5+2].catName;
+					products[i].brandslug=result[i*5+3].brandSlug;
+					products[i].cateslug=result[i*5+4].catSlug;
+					products[i].genderslug=getGenderSlug(products[i].sex)
 				}
 
 				    
@@ -591,7 +606,9 @@ function shopbysex(req,res,next,gender,brand) {
 		for (let i=0;i<productLength;i++){
 			detailPromises.push(ProductService.getImageLink(products[i].proID));
 			detailPromises.push(ProductService.getProductDetail(products[i].proID));
-			detailPromises.push(ProductService.getCateName(products[i].catID))
+			detailPromises.push(ProductService.getCateName(products[i].catID));
+			detailPromises.push(ProductService.getBrandSlug(products[i].brandID));
+			detailPromises.push(ProductService.getCateSlug(products[i].catID));
 		}
 
 		
@@ -601,9 +618,12 @@ function shopbysex(req,res,next,gender,brand) {
 		.then(result=>{
 		
 				for (let i=0;i<productLength;i++){
-					products[i].image=result[i*3][0].proImage;
-					products[i].detail=result[i*3+1];
-					products[i].cate=result[i*3+2].catName;
+					products[i].image=result[i*5][0].proImage;
+					products[i].detail=result[i*5+1];
+					products[i].cate=result[i*5+2].catName;
+					products[i].brandslug=result[i*5+3].brandSlug;
+					products[i].cateslug=result[i*5+4].catSlug;
+					products[i].genderslug=getGenderSlug(products[i].sex)
 				}
 
 
@@ -632,5 +652,12 @@ function shopbysex(req,res,next,gender,brand) {
 	})
 }
 
-
+function getGenderSlug(sex) {
+	let gender="unisex";
+	if (sex==1)
+		gender="women";
+	if (sex==0)
+		gender="mem";
+	return gender;
+}
 module.exports = new ShopController;

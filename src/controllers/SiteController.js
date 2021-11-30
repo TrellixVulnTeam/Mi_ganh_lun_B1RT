@@ -15,13 +15,12 @@ class SiteController{
         let name=null;
         
         const productPromises=[
-            ProductService.listByFeatured()
+            ProductService.listByFeatured(),
         ]
 
         Promise.all(productPromises)
         .then(result=>{
             let products=result[0];
-
 
             //Lấy được product
             //Giờ lấy detail của cái product đó
@@ -47,6 +46,9 @@ class SiteController{
                         products[i].detail=result[i*3+1];
                         products[i].cate=result[i*3+2].catName;
                     }
+
+                    let product2=products;
+
 
                     
                     res.render('home',{products});

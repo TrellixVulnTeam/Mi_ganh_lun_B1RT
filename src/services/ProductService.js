@@ -3,6 +3,8 @@ const Util = require('../util/Utility');
 
 class ProductService{
 
+
+
 	list(limit, page, name){
         if(name){
             return models.product.findAll({
@@ -132,6 +134,27 @@ class ProductService{
             }
         })
     }
+
+    getBrandSlug(id){
+        return models.brand.findOne({
+            raw:true,
+            attributes: ['brandSlug'],
+            where: {
+                brandID: id
+            }
+        })
+    }
+
+    getCateSlug(id){
+        return models.category.findOne({
+            raw:true,
+            attributes: ['catSlug'],
+            where: {
+                catID: id
+            }
+        })
+    }
+
 }
 
 module.exports = new ProductService;
