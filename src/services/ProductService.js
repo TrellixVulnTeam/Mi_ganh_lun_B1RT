@@ -122,6 +122,16 @@ class ProductService{
             }
         });
         }
+
+    
+    listByFeatured(){
+        return models.product.findAll({
+            raw:true,
+            where:{
+                isFeature: 1,
+            }
+        })
+    }
 }
 
 module.exports = new ProductService;
