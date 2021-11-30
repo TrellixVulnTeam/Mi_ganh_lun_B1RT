@@ -293,8 +293,8 @@ function shopbycate(req,res,next,brand,gender,category) {
 
 
 	const productPromises=[
-		ProductService.listByBrand(itemPerPage,currentPage,cateID),
-		ProductService.getProductTotalBrand(cateID),
+		ProductService.listByCate(itemPerPage,currentPage,cateID),
+		ProductService.getProductTotalCate(cateID),
 	]
 
 
