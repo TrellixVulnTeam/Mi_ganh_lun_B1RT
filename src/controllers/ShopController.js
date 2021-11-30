@@ -134,7 +134,7 @@ class ShopController{
 										products2[i].cate=result[i*5+2].catName;
 										products2[i].brandslug=result[i*5+3].brandSlug;
 										products2[i].cateslug=result[i*5+4].catSlug;
-										products2[i].genderslug=getGenderSlug(products[i].sex)
+										products2[i].genderslug=getGenderSlug(products2[i].sex)
 									}
 										res.render('shop/shop',{
 										products,
@@ -458,7 +458,7 @@ function shopbycate(req,res,next,brand,gender,category) {
 										products2[i].cate=result[i*5+2].catName;
 										products2[i].brandslug=result[i*5+3].brandSlug;
 										products2[i].cateslug=result[i*5+4].catSlug;
-										products2[i].genderslug=getGenderSlug(products[i].sex)
+										products2[i].genderslug=getGenderSlug(products2[i].sex)
 									}
 										res.render("shop/category",{
 										products,
@@ -644,7 +644,7 @@ function shopbybrand(req,res,next,brand) {
 								products2[i].cate=result[i*5+2].catName;
 								products2[i].brandslug=result[i*5+3].brandSlug;
 								products2[i].cateslug=result[i*5+4].catSlug;
-								products2[i].genderslug=getGenderSlug(products[i].sex)
+								products2[i].genderslug=getGenderSlug(products2[i].sex)
 							}
 								res.render('shop/brand', {
 								products,
@@ -817,7 +817,7 @@ function shopbysex(req,res,next,gender,brand) {
 									products2[i].cate=result[i*5+2].catName;
 									products2[i].brandslug=result[i*5+3].brandSlug;
 									products2[i].cateslug=result[i*5+4].catSlug;
-									products2[i].genderslug=getGenderSlug(products[i].sex)
+									products2[i].genderslug=getGenderSlug(products2[i].sex)
 								}
 									res.render('shop/' + gender,{
 									products,
@@ -863,7 +863,7 @@ function getGenderSlug(sex) {
 	if (sex==1)
 		gender="women";
 	if (sex==0)
-		gender="mem";
+		gender="men";
 	return gender;
 }
 

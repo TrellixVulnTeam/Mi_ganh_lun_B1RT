@@ -1,5 +1,6 @@
 const {models} = require('../models');
 const Util = require('../util/Utility');
+const {sequelize} = require('../models');
 
 class ProductService{
 
@@ -165,6 +166,17 @@ class ProductService{
             }
         })
     }
+
+    listAll(){
+        return models.product.findAll({
+            raw:true,
+            order: [
+                ['sold', 'DESC'],
+            ]
+            })
+    }
 }
+
+
 
 module.exports = new ProductService;
