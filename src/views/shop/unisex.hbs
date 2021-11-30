@@ -433,14 +433,27 @@
 									<!-- /RATING -->
 									<p>{{this.fullDescription}}</p>
 									<p class="highlighted current">${{this.price}}</p>
-									<h5 class="stock">Availability:
-										<!-- SVG CHECK -->
-										<svg class="svg-plus">
-											<use xlink:href="#svg-plus"></use>
-										</svg>
-										<!-- /SVG CHECK -->
-										<span class="not-available">No Stock</span>
-									</h5>
+									
+									 {{#if this.quantity}}  
+                                        <h5 class="stock">Availability:
+                                            <!-- SVG CHECK -->
+                                            <svg class="svg-check">
+                                                <use xlink:href="#svg-check"></use>
+                                            </svg>
+                                            <!-- /SVG CHECK -->
+                                            <span class="available">In Stock</span>
+                                        </h5>
+                                    {{else}}
+                                        <h5 class="stock">Availability:
+                                            <!-- SVG CHECK -->
+                                            <svg class="svg-plus">
+                                                <use xlink:href="#svg-plus"></use>
+                                            </svg>
+                                            <!-- /SVG CHECK -->
+                                            <span class="not-available">No Stock</span>
+                                        </h5>
+                                    {{/if}}
+
 									<h5>Select Size:</h5>
 									<form class="westeros-form">
 										<input id="small1" type="radio" name="size" value="small">
@@ -482,15 +495,28 @@
 										<a href="#" class="button medium fb"></a>
 										<a href="#" class="button medium twt"></a>
                                         
-                                        
-										<a href="#" class="button no-stock">
-											<!-- SVG PLUS -->
-											<svg class="svg-plus">
-												<use xlink:href="#svg-plus"></use>
-											</svg>
-											<!-- /SVG PLUS -->
-											Out Of Stock
+										 {{#if this.quantity}}
+                                                <a href="/me/checkout" class="button cart-add my-buynow-btn">
+											    Buy now
+										        </a>
+                                                <a href="#" class="button cart-add">
+                                                <!-- SVG PLUS -->
+                                                <svg class="svg-plus">
+                                                    <use xlink:href="#svg-plus"></use>
+                                                </svg>
+                                                <!-- /SVG PLUS -->
+                                                Add to Cart
+                                                </a>
+                                        {{else}}
+                                                <a href="#" class="button no-stock">
+                                                <!-- SVG PLUS -->
+                                                <svg class="svg-plus">
+                                                    <use xlink:href="#svg-plus"></use>
+                                                </svg>
+                                                <!-- /SVG PLUS -->
+                                                Out Of Stock
 										</a>
+                                        {{/if}}
 									</div>
 								</div>
 								<!-- /PRODUCT DESCRIPTION -->
