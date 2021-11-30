@@ -74,7 +74,7 @@ class ShopController{
             let detailPromises=[];
     
             
-           // console.log(products);
+            //console.log(products);
             for (let i=0;i<productLength;i++){
                 detailPromises.push(ProductService.getImageLink(products[i].proID));
                 detailPromises.push(ProductService.getProductDetail(products[i].proID));
@@ -98,13 +98,66 @@ class ShopController{
 						products[i].genderslug=getGenderSlug(products[i].sex)
 					}
 
-                    res.render('shop/shop',{
-                        products,
-                        currentPage,
-                        totalPage,
-                        paginationArray,
-                        prevPage: (currentPage > 1) ? currentPage - 1 : 1,
-                        nextPage: (currentPage < totalPage) ? currentPage + 1 : totalPage,});
+					// lấy cái thanh featured bên sidebar
+				
+							const productPromises2=[
+								ProductService.listByFeaturedLimit(4),
+							]
+						
+							return Promise.all(productPromises2)
+							.then(result2=>{
+								let products2=result2[0];
+						
+								//Lấy được product
+								//Giờ lấy detail của cái product đó
+								const productLength2=products2.length;
+								let detailPromises2=[];
+						
+								
+							for (let i=0;i<productLength2;i++){
+								detailPromises2.push(ProductService.getImageLink(products2[i].proID));
+								detailPromises2.push(ProductService.getProductDetail(products2[i].proID));
+								detailPromises2.push(ProductService.getCateName(products2[i].catID));
+								detailPromises2.push(ProductService.getBrandSlug(products2[i].brandID));
+								detailPromises2.push(ProductService.getCateSlug(products2[i].catID));
+							}
+						
+							
+							
+							//Chuẩn bị render
+							return Promise.all(detailPromises2)
+							.then(result=>{
+							
+									for (let i=0;i<productLength2;i++){
+										products2[i].image=result[i*5][0].proImage;
+										products2[i].detail=result[i*5+1];
+										products2[i].cate=result[i*5+2].catName;
+										products2[i].brandslug=result[i*5+3].brandSlug;
+										products2[i].cateslug=result[i*5+4].catSlug;
+										products2[i].genderslug=getGenderSlug(products[i].sex)
+									}
+										res.render('shop/shop',{
+										products,
+										products2,
+										currentPage,
+										totalPage,
+										paginationArray,
+										prevPage: (currentPage > 1) ? currentPage - 1 : 1,
+										nextPage: (currentPage < totalPage) ? currentPage + 1 : totalPage,});
+										
+								})
+								.catch(err=>{
+									console.log(err);
+								})
+				
+				
+					})
+					.catch(err=>{
+						console.log(err);
+					})
+				
+
+                   
             })
             .catch(err=>{
                 console.log(err);
@@ -369,19 +422,71 @@ function shopbycate(req,res,next,brand,gender,category) {
 					products[i].cateslug=result[i*5+4].catSlug;
 					products[i].genderslug=getGenderSlug(products[i].sex)
 				}
+							// lấy cái thanh featured bên sidebar
+				
+							const productPromises2=[
+								ProductService.listByFeaturedLimit(4),
+							]
+						
+							return Promise.all(productPromises2)
+							.then(result2=>{
+								let products2=result2[0];
+						
+								//Lấy được product
+								//Giờ lấy detail của cái product đó
+								const productLength2=products2.length;
+								let detailPromises2=[];
+						
+								
+							for (let i=0;i<productLength2;i++){
+								detailPromises2.push(ProductService.getImageLink(products2[i].proID));
+								detailPromises2.push(ProductService.getProductDetail(products2[i].proID));
+								detailPromises2.push(ProductService.getCateName(products2[i].catID));
+								detailPromises2.push(ProductService.getBrandSlug(products2[i].brandID));
+								detailPromises2.push(ProductService.getCateSlug(products2[i].catID));
+							}
+						
+							
+							
+							//Chuẩn bị render
+							return Promise.all(detailPromises2)
+							.then(result=>{
+							
+									for (let i=0;i<productLength2;i++){
+										products2[i].image=result[i*5][0].proImage;
+										products2[i].detail=result[i*5+1];
+										products2[i].cate=result[i*5+2].catName;
+										products2[i].brandslug=result[i*5+3].brandSlug;
+										products2[i].cateslug=result[i*5+4].catSlug;
+										products2[i].genderslug=getGenderSlug(products[i].sex)
+									}
+										res.render("shop/category",{
+										products,
+										products2,
+										currentPage,
+										totalPage,
+										paginationArray,
+										prevPage: (currentPage > 1) ? currentPage - 1 : 1,
+										nextPage: (currentPage < totalPage) ? currentPage + 1 : totalPage,
+										brand: getDataSlug(brand),
+										gender: getDataSlug(gender),
+										category: getDataSlug(category),
+										link: "/shop/" +brand + "/" +gender + "/" + category
+										})
+										
+								})
+								.catch(err=>{
+									console.log(err);
+								})
+				
+				
+					})
+					.catch(err=>{
+						console.log(err);
+					})
+				
 
-					res.render("shop/category",{
-					products,
-					currentPage,
-					totalPage,
-					paginationArray,
-					prevPage: (currentPage > 1) ? currentPage - 1 : 1,
-					nextPage: (currentPage < totalPage) ? currentPage + 1 : totalPage,
-                    brand: getDataSlug(brand),
-                    gender: getDataSlug(gender),
-                    category: getDataSlug(category),
-                    link: "/shop/" +brand + "/" +gender + "/" + category
-                	})
+			
 				    
 		})
 		.catch(err=>{
@@ -503,17 +608,68 @@ function shopbybrand(req,res,next,brand) {
 					products[i].genderslug=getGenderSlug(products[i].sex)
 				}
 
+					// lấy cái thanh featured bên sidebar
+				
+					const productPromises2=[
+						ProductService.listByFeaturedLimit(4),
+					]
+				
+					return Promise.all(productPromises2)
+					.then(result2=>{
+						let products2=result2[0];
+				
+						//Lấy được product
+						//Giờ lấy detail của cái product đó
+						const productLength2=products2.length;
+						let detailPromises2=[];
+				
+						
+					for (let i=0;i<productLength2;i++){
+						detailPromises2.push(ProductService.getImageLink(products2[i].proID));
+						detailPromises2.push(ProductService.getProductDetail(products2[i].proID));
+						detailPromises2.push(ProductService.getCateName(products2[i].catID));
+						detailPromises2.push(ProductService.getBrandSlug(products2[i].brandID));
+						detailPromises2.push(ProductService.getCateSlug(products2[i].catID));
+					}
+				
+					
+					
+					//Chuẩn bị render
+					return Promise.all(detailPromises2)
+					.then(result=>{
+					
+							for (let i=0;i<productLength2;i++){
+								products2[i].image=result[i*5][0].proImage;
+								products2[i].detail=result[i*5+1];
+								products2[i].cate=result[i*5+2].catName;
+								products2[i].brandslug=result[i*5+3].brandSlug;
+								products2[i].cateslug=result[i*5+4].catSlug;
+								products2[i].genderslug=getGenderSlug(products[i].sex)
+							}
+								res.render('shop/brand', {
+								products,
+								products2,
+								currentPage,
+								totalPage,
+								paginationArray,
+								prevPage: (currentPage > 1) ? currentPage - 1 : 1,
+								nextPage: (currentPage < totalPage) ? currentPage + 1 : totalPage,
+								brand : util.getDataSlug(brand),
+								link: "/shop/" + brand
+								});
+								
+						})
+						.catch(err=>{
+							console.log(err);
+						})
+		
+		
+			})
+			.catch(err=>{
+				console.log(err);
+			})
 				    
-					res.render('shop/brand', {
-					products,
-					currentPage,
-					totalPage,
-					paginationArray,
-					prevPage: (currentPage > 1) ? currentPage - 1 : 1,
-					nextPage: (currentPage < totalPage) ? currentPage + 1 : totalPage,
-					brand : util.getDataSlug(brand),
-					link: "/shop/" + brand
-					});
+			
 
 		})
 		.catch(err=>{
@@ -625,19 +781,69 @@ function shopbysex(req,res,next,gender,brand) {
 					products[i].cateslug=result[i*5+4].catSlug;
 					products[i].genderslug=getGenderSlug(products[i].sex)
 				}
+						// lấy cái thanh featured bên sidebar
+				
+						const productPromises2=[
+							ProductService.listByFeaturedLimit(4),
+						]
+					
+						return Promise.all(productPromises2)
+						.then(result2=>{
+							let products2=result2[0];
+					
+							//Lấy được product
+							//Giờ lấy detail của cái product đó
+							const productLength2=products2.length;
+							let detailPromises2=[];
+					
+							
+						for (let i=0;i<productLength2;i++){
+							detailPromises2.push(ProductService.getImageLink(products2[i].proID));
+							detailPromises2.push(ProductService.getProductDetail(products2[i].proID));
+							detailPromises2.push(ProductService.getCateName(products2[i].catID));
+							detailPromises2.push(ProductService.getBrandSlug(products2[i].brandID));
+							detailPromises2.push(ProductService.getCateSlug(products2[i].catID));
+						}
+					
+						
+						
+						//Chuẩn bị render
+						return Promise.all(detailPromises2)
+						.then(result=>{
+						
+								for (let i=0;i<productLength2;i++){
+									products2[i].image=result[i*5][0].proImage;
+									products2[i].detail=result[i*5+1];
+									products2[i].cate=result[i*5+2].catName;
+									products2[i].brandslug=result[i*5+3].brandSlug;
+									products2[i].cateslug=result[i*5+4].catSlug;
+									products2[i].genderslug=getGenderSlug(products[i].sex)
+								}
+									res.render('shop/' + gender,{
+									products,
+									products2,
+									currentPage,
+									totalPage,
+									paginationArray,
+									prevPage: (currentPage > 1) ? currentPage - 1 : 1,
+									nextPage: (currentPage < totalPage) ? currentPage + 1 : totalPage,
+									brand : util.getUIBrandName(brand),
+									gender : util.getUIgender(gender),
+									link: "/shop/" +brand + "/" +gender
+									})
+									
+							})
+							.catch(err=>{
+								console.log(err);
+							})
+			
+			
+				})
+				.catch(err=>{
+					console.log(err);
+				})
 
-
-					res.render('shop/' + gender,{
-					products,
-					currentPage,
-					totalPage,
-					paginationArray,
-					prevPage: (currentPage > 1) ? currentPage - 1 : 1,
-					nextPage: (currentPage < totalPage) ? currentPage + 1 : totalPage,
-					brand : util.getUIBrandName(brand),
-					gender : util.getUIgender(gender),
-					link: "/shop/" +brand + "/" +gender
-					})
+			
 		})
 		.catch(err=>{
 			console.log(err);
@@ -660,4 +866,10 @@ function getGenderSlug(sex) {
 		gender="mem";
 	return gender;
 }
+
+function getFeaturedList(){
+
+	
+}
+
 module.exports = new ShopController;

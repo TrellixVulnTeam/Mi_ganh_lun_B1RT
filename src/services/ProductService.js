@@ -154,7 +154,17 @@ class ProductService{
             }
         })
     }
+    
 
+    listByFeaturedLimit(amount){
+        return models.product.findAll({
+            raw:true,
+            limit: amount,
+            where:{    
+                isFeature: 1,
+            }
+        })
+    }
 }
 
 module.exports = new ProductService;
